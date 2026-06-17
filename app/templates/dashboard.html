@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Web Scraper Dashboard{% endblock %}
+{% block content %}
+<h3 class="mb-3">Scrape prices &amp; data from any page</h3>
+<p class="text-muted">Enter a URL. By default the scraper pulls out price-shaped snippets.
+   Optionally add a CSS selector to extract exactly the elements you want.</p>
+
+<div class="card p-4 mb-4">
+  <form method="post" action="/scrape">
+    <div class="mb-3">
+      <label class="form-label">URL</label>
+      <input type="url" name="url" class="form-control" placeholder="https://example-shop.com/products" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">CSS selector <span class="text-muted small">(optional, e.g. <code>.product-card</code>)</span></label>
+      <input type="text" name="selector" class="form-control" placeholder=".product-card">
+    </div>
+    <button class="btn btn-primary" type="submit"><i class="bi bi-cloud-download me-1"></i>Scrape</button>
+  </form>
+</div>
+
+<h5 class="mb-2">Recent scrapes</h5>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead class="table-light">
+        <tr><th>#</th><th>URL</th><th>Title</th><th>Items</th><th>Status</th><th>When</th></tr>
+      </thead>
+      <tbody>
+      {% for j in jobs %}
+        <tr>
+          <td>{{ j.id }}</td>
+          <td class="text-truncate" style="max-width:260px;"><a href="/scrape/{{ j.id }}">{{ j.url }}</a></td>
+          <td class="text-truncate" style="max-width:220px;">{{ j.page_title }}</td>
+          <td>{{ j.item_count }}</td>
+          <td>
+            {% if j.status == 'ok' %}<span class="badge bg-success">ok</span>
+            {% else %}<span class="badge bg-danger">{{ j.status }}</span>{% endif %}
+          </td>
+          <td class="text-muted small">{{ j.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6" class="text-center text-muted py-4">No scrapes yet — try one above.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

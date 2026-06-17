@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Scrape #{{ job.id }} — Web Scraper{% endblock %}
+{% block content %}
+<a class="btn btn-sm btn-outline-secondary mb-3" href="/">← New scrape</a>
+
+<div class="card p-3 mb-4">
+  <div class="d-flex flex-wrap justify-content-between gap-2">
+    <div>
+      <h4 class="mb-1 text-truncate" style="max-width:600px;">{{ job.page_title or job.url }}</h4>
+      <a href="{{ job.url }}" target="_blank" rel="noopener" class="text-muted small">{{ job.url }}</a>
+      {% if job.selector %}<div class="small text-muted">selector: <code>{{ job.selector }}</code></div>{% endif %}
+    </div>
+    <div class="text-end">
+      <div class="stat text-primary">{{ job.item_count }}</div>
+      <div class="text-muted small">items extracted</div>
+    </div>
+  </div>
+  {% if job.status != 'ok' %}
+    <div class="alert alert-danger mt-3 small mb-0"><b>Error:</b> {{ job.error }}</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead class="table-light">
+        <tr><th style="width:70px;">#</th><th>Label / context</th><th style="width:160px;">Price</th></tr>
+      </thead>
+      <tbody>
+      {% for it in items %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ it.label }}</td>
+          <td><span class="price">{{ it.price or '—' }}</span></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="3" class="text-center text-muted py-4">No items extracted. Try a CSS selector for precise results.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
