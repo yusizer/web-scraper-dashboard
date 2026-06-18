@@ -1,0 +1,25 @@
+# Render Blueprint — one-click deploy.
+# Go to https://dashboard.render.com/blueprints and select this repo.
+services:
+  - type: web
+    name: web-scraper-dashboard
+    runtime: python
+    plan: free
+    region: frankfurt  # EU; change to oregon if you prefer US
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      # Pin Python 3.12 — pydantic-core wheels exist for 3.12 (not 3.14).
+      - key: PYTHON_VERSION
+        value: "3.12.6"
+      # SQLite (ephemeral on free plan — resets on redeploy, fine for a demo).
+      - key: DATABASE_URL
+        value: sqlite+aiosqlite:///./scrapes.db
+      - key: REQUEST_TIMEOUT_SECONDS
+        value: "15"
+      - key: MAX_ITEMS
+        value: "100"
+      - key: WEB_HOST
+        value: 0.0.0.0
