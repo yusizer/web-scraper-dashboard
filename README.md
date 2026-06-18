@@ -1,5 +1,8 @@
 # Web Scraper + Dashboard 🕸️
 
+![CI](https://github.com/yusizer/web-scraper-dashboard/actions/workflows/ci.yml/badge.svg)
+**Live demo:** https://web-scraper-dashboard-ba4x.onrender.com/
+
 Enter a URL → the scraper pulls out price-shaped snippets (or exactly the
 elements you select) and shows them in a web dashboard, with a persistent
 history of every scrape. FastAPI + BeautifulSoup, Dockerized, tested.
